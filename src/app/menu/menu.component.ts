@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
 import { Subscription } from 'rxjs';
+import { ItemsService } from '../services/items.service';
 
 @Component({
   selector: 'app-menu',
@@ -17,10 +18,28 @@ export class MenuComponent implements OnInit, OnDestroy {
   private subscription?: Subscription;
 
   categories: { name: string; icon: string; }[] = [];
+  items: any[] = [];
   loading = true;
+  loadingItems: boolean = true;
+  currentIndex: number = 0;
+  intervalId: any;
+
+  constructor(private itemsService: ItemsService) {}
 
   ngOnInit() {
     this.loadCategories();
+    this.loadingItems = true;
+    this.itemsService.getAllItems().subscribe({
+      next: (data) => {
+        this.items = data;
+        this.loadingItems = false;
+      },
+      error: () => {
+        this.items = [];
+        this.loadingItems = false;
+      }
+    });
+    this.startAutoScroll();
   }
 
   private loadCategories() {
@@ -61,5 +80,20 @@ export class MenuComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  startAutoScroll() {
+    const track = document.querySelector('.item-scroller-track') as HTMLElement;
+    const totalItems = this.items.length;
+    const itemsPerScroll = 2;
+
+    this.intervalId = setInterval(() => {
+      this.currentIndex = (this.currentIndex + itemsPerScroll) % totalItems;
+      const scrollAmount = this.currentIndex * (track.offsetWidth / totalItems);
+      track.style.transform = `translateX(-${scrollAmount}px)`;
+    }, 30); // Ultra-fast interval (30ms)
   }
 }

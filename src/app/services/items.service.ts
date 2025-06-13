@@ -78,4 +78,17 @@ export class ItemsService {
       )
     );
   }
+
+  getAllItems() {
+    return this.db.list<FirebaseItem>('items')
+      .snapshotChanges()
+      .pipe(
+        map(changes =>
+          changes.map(c => ({
+            key: c.payload.key,
+            ...(c.payload.val() as FirebaseItem)
+          }))
+        )
+      );
+  }
 }

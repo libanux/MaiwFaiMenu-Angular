@@ -1,15 +1,14 @@
 <div class="menu-container">
   <!-- Hero Section -->
   <div class="hero-section">
-    <div class="hero-content">
-      <h1 class="hero-title">Area 51 Menu</h1>
-      <p class="hero-subtitle">Discover Extraordinary Flavors</p>
-      <div class="hero-accent">
-        <span class="accent-pill">Fresh</span>
-        <span class="accent-dot"></span>
-        <span class="accent-pill">Local</span>
-        <span class="accent-dot"></span>
-        <span class="accent-pill">Inspired</span>
+ <div class="menu-title ">Our Menu</div>
+  </div>
+
+  <!-- Items Scroller Section -->
+  <div class="item-scroller-section">
+    <div class="item-scroller-track">
+      <div class="item-scroll-image" *ngFor="let item of items">
+        <img [src]="item.ITEM_PHOTO" [alt]="item.ITEM_NAME" />
       </div>
     </div>
   </div>
@@ -18,26 +17,144 @@
   <div class="categories-wrapper" *ngIf="!loading">
     <div class="categories-grid">
       <div class="category-card" *ngFor="let category of categories"
-           (click)="navigateToCategory(category.name)">
-        <div class="card-media" [style.background-image]="'url(' + category.icon + ')'">
+           (click)="navigateToCategory(category.name)"  [style.background-image]="'url(' + category.icon + ')'">
+        <div class="card-media" >
           <div class="card-overlay"></div>
           <div class="card-content">
             <h2 class="card-title">{{ category.name }}</h2>
-            <div class="card-action">
-              <span class="action-text">View Menu</span>
-              <svg class="action-icon" viewBox="0 0 24 24">
-                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
-              </svg>
-            </div>
+          
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- No Categories State -->
+  <div *ngIf="!loading && categories?.length === 0" class="no-categories">
+    <span class="no-categories-icon">🍽️</span>
+    <p>No categories available</p>
+  </div>
+
   <!-- Loading State -->
-  <div class="loading-state" *ngIf="loading">
-    <div class="loading-animation"></div>
-    <p>Preparing your culinary journey...</p>
+  <div class="loading-state" *ngIf="loading" class="loader-container">
+    <div class="loader"></div>
   </div>
 </div>
+
+<style>
+.category-card {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    background: #393E46;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-title {
+    position: relative;
+    z-index: 2;
+    color: #292828;
+    font-size: 1.4rem;
+    font-weight:800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* .card-title::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background: #4ECCA3;
+    box-shadow: 0 0 10px rgba(78, 204, 163, 0.5);
+    transition: all 0.3s ease;
+} */
+
+/* .card-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background: #4ECCA3;
+    box-shadow: 0 0 10px rgba(78, 204, 163, 0.5);
+    transition: all 0.3s ease;
+}*/
+
+.category-card:hover .card-title {
+    color: #4ECCA3;
+    transform: scale(1.1);
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(78, 204, 163, 0.3);
+}
+
+.category-card:hover .card-title::before,
+.category-card:hover .card-title::after {
+    width: 50px;
+    background: #66FCB1;
+    box-shadow: 0 0 20px rgba(78, 204, 163, 0.7);
+}
+
+.no-categories {
+  text-align: center;
+  padding: 2rem;
+  color: #777;
+}
+
+.no-categories-icon {
+  font-size: 4rem;
+}
+
+.item-scroller-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin: 2rem 0;
+}
+
+.item-scroller-track {
+  display: flex;
+  animation: scroll 20s linear infinite;
+}
+
+.item-scroll-image {
+  min-width: 250px;
+  height: 250px;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.item-scroll-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+/* Animation for scrolling effect */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+</style>
+
