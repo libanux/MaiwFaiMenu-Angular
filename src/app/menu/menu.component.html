@@ -1,0 +1,43 @@
+<div class="menu-container">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Area 51 Menu</h1>
+      <p class="hero-subtitle">Discover Extraordinary Flavors</p>
+      <div class="hero-accent">
+        <span class="accent-pill">Fresh</span>
+        <span class="accent-dot"></span>
+        <span class="accent-pill">Local</span>
+        <span class="accent-dot"></span>
+        <span class="accent-pill">Inspired</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories Grid -->
+  <div class="categories-wrapper" *ngIf="!loading">
+    <div class="categories-grid">
+      <div class="category-card" *ngFor="let category of categories"
+           (click)="navigateToCategory(category.name)">
+        <div class="card-media" [style.background-image]="'url(' + category.icon + ')'">
+          <div class="card-overlay"></div>
+          <div class="card-content">
+            <h2 class="card-title">{{ category.name }}</h2>
+            <div class="card-action">
+              <span class="action-text">View Menu</span>
+              <svg class="action-icon" viewBox="0 0 24 24">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="loading-animation"></div>
+    <p>Preparing your culinary journey...</p>
+  </div>
+</div>

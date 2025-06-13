@@ -1,0 +1,34 @@
+<div class="category-view">
+  <div class="category-header">
+    <h1>{{ categoryName }}</h1>
+  </div>
+
+  <div class="subcategories-container" *ngIf="!loading">
+    <div class="subcategory-card" *ngFor="let subcategory of subcategories">
+      <div class="subcategory-header" (click)="toggleSubcategory(subcategory)">
+        <div class="subcategory-info">
+          <img *ngIf="subcategory.icon" [src]="subcategory.icon" [alt]="subcategory.name" class="subcategory-icon">
+          <h2>{{ subcategory.name }}</h2>
+        </div>
+        <span class="expand-icon" [class.expanded]="subcategory.isExpanded">▼</span>
+      </div>
+
+      <div class="items-container" *ngIf="subcategory.isExpanded">
+        <div class="item-card" *ngFor="let item of subcategory.items">
+          <div class="item-image" *ngIf="item.ITEM_PHOTO">
+            <img [src]="item.ITEM_PHOTO" [alt]="item.ITEM_NAME">
+          </div>
+          <div class="item-content">
+            <h3>{{ item.ITEM_NAME }}</h3>
+            <p class="price">${{ item.ITEM_PRICE }}</p>
+            <p class="description" *ngIf="item.DESCRIPTION">{{ item.DESCRIPTION }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    Loading...
+  </div>
+</div>
