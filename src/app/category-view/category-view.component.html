@@ -1,107 +1,67 @@
 <div class="category-view">
+  <!-- Animated background particles -->
+  <div class="bg-particles" id="particles"></div>
+  
   <div class="menu-banner">
-  <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2000" 
-       alt="Delicious Food Banner" 
-       class="banner-image">
-</div>
-  <div class="category-header">
-    <h1 class="category-title">{{ categoryName }}</h1>
+    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2000"
+         alt="Delicious Food Banner"
+         class="banner-image">
   </div>
 
-  <div class="subcategories-container" *ngIf="!loading">
-    <div class="subcategory-card" *ngFor="let subcategory of subcategories">
-      <div class="subcategory-header" (click)="toggleSubcategory(subcategory)">
-        <div class="subcategory-info">
-          <img *ngIf="subcategory.icon" [src]="subcategory.icon" [alt]="subcategory.name" class="subcategory-icon">
-          <h2 class="subcategory-name">{{ subcategory.name }}</h2>
-        </div>
-        <span class="expand-icon" [class.expanded]="subcategory.isExpanded">▼</span>
-      </div>
-
-      <div class="items-container" *ngIf="subcategory.isExpanded">
-        <div class="item-card" *ngFor="let item of subcategory.items">
-          <div class="item-image" *ngIf="item.ITEM_PHOTO">
-            <img [src]="item.ITEM_PHOTO" [alt]="item.ITEM_NAME">
+  <div class="main-content">
+    <h1 class="category-title">{{ categoryName }}</h1>
+    
+    <!-- Show subcategories if they exist and not loading -->
+    <div class="subcategories-container" *ngIf="!loading && subcategories && subcategories.length > 0">
+      <div class="subcategory-card" *ngFor="let subcategory of subcategories">
+        <div class="subcategory-header" (click)="toggleSubcategory(subcategory)">
+          <div class="subcategory-info">
+            <img *ngIf="subcategory.icon"
+                 [src]="subcategory.icon"
+                 [alt]="subcategory.name"
+                 class="subcategory-icon">
+            <h2 class="subcategory-name">{{ subcategory.name }}</h2>
           </div>
-          <div class="item-content">
-            <h3>{{ item.ITEM_NAME }}</h3>
-            <p class="price">${{ item.ITEM_PRICE }}</p>
-            <p class="description" *ngIf="item.DESCRIPTION">{{ item.DESCRIPTION }}</p>
+          <i class="fas fa-chevron-down expand-icon"
+             [class.expanded]="subcategory.isExpanded"></i>
+        </div>
+        
+        <div class="items-container"
+             [class.expanded]="subcategory.isExpanded">
+          <!-- Show items if they exist -->
+          <div class="items-grid" *ngIf="subcategory.items && subcategory.items.length > 0">
+            <div class="item-card" *ngFor="let item of subcategory.items">
+              <div class="item-image" *ngIf="item.ITEM_PHOTO">
+                <img [src]="item.ITEM_PHOTO" [alt]="item.ITEM_NAME">
+              </div>
+              <div class="item-content">
+                <h3 class="item-name">{{ item.ITEM_NAME }}</h3>
+                <p class="price">${{ item.ITEM_PRICE }}</p>
+                <p class="description" *ngIf="item.DESCRIPTION">{{ item.DESCRIPTION }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Show empty items message if no items -->
+          <div class="empty-items" *ngIf="!subcategory.items || subcategory.items.length === 0">
+            <i class="fas fa-glass-martini-alt empty-items-icon"></i>
+            <p class="empty-items-message">No items available in this category</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="loading-spinner" *ngIf="loading">
-    Loading...
+    <!-- Show empty subcategories message if no subcategories -->
+    <div class="empty-state" *ngIf="!loading && (!subcategories || subcategories.length === 0)">
+      <i class="fas fa-utensils empty-state-icon"></i>
+      <h3 class="empty-state-title">No Subcategories Available</h3>
+      <p class="empty-state-message">There are currently no subcategories in this section. </p>
+    </div>
+
+    <!-- Loading spinner -->
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading delicious items...</p>
+    </div>
   </div>
 </div>
-
-<style>
-.subcategory-name {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  padding: 1.5rem 2rem;
-  margin-bottom: 2rem;
-  background: linear-gradient(to right, #ffffff, rgba(78, 204, 163, 0.05));
-  border-radius: 12px;
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #2c3e50;
-  text-transform: capitalize;
-  letter-spacing: 0.5px;
-  box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.05),
-    inset 2px 0 0 #4ECCA3;
-  transition: all 0.3s ease;
-}
-
-.subcategory-name::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: 3px;
-  background: #4ECCA3;
-  transition: width 0.3s ease;
-}
-
-.subcategory-name:hover {
-  transform: translateX(5px);
-  background: linear-gradient(to right, #ffffff, rgba(78, 204, 163, 0.1));
-  box-shadow: 
-    0 6px 20px rgba(0, 0, 0, 0.08),
-    inset 4px 0 0 #4ECCA3;
-}
-
-.subcategory-name:hover::before {
-  width: 100%;
-}
-
-.subcategory-name i {
-  font-size: 1.4rem;
-  color: #4ECCA3;
-  opacity: 0.9;
-  transition: transform 0.3s ease;
-}
-
-.subcategory-name:hover i {
-  transform: rotate(10deg) scale(1.1);
-}
-
-@media (max-width: 768px) {
-  .subcategory-name {
-    font-size: 1.3rem;
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .subcategory-name i {
-    font-size: 1.2rem;
-  }
-}
-</style>
