@@ -1,12 +1,12 @@
 export const environment = {
   firebase: {
-    projectId: 'menu-ssas',
-    appId: '1:429941105762:web:cb9f616e181edd6b3c9d3b',
-    databaseURL: 'https://menu-ssas-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'menu-ssas.appspot.com',
-    apiKey: 'AIzaSyAuzO-2TOyRhSy1juViro1aTIQQ6TtkeIk',
-    authDomain: 'menu-ssas.firebaseapp.com',
-    messagingSenderId: '429941105762',
-    measurementId: 'G-GCJW3MS7PN',
+     apiKey: "AIzaSyAUZRwZhO4o87uY712_rPyCIVMAYQjmDc8",
+  authDomain: "maywfaymenu.firebaseapp.com",
+  databaseURL: "https://maywfaymenu-default-rtdb.firebaseio.com",
+  projectId: "maywfaymenu",
+  storageBucket: "maywfaymenu.firebasestorage.app",
+  messagingSenderId: "981257128372",
+  appId: "1:981257128372:web:82270c9ccc4473fd2f4ae1",
+  measurementId: "G-12FQFLT9S0"
   },
 };
