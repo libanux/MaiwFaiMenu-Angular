@@ -1,22 +1,18 @@
 <div class="main">
-  <!-- <img class="bg-main"  src="./assets/images/bg-main.png" /> -->
+
+  <div class="language-selector-wrapper">
+    <label for="language-select" class="language-label">🌐 Language:</label>
+    <select id="language-select" (change)="onLanguageChange($event)" [value]="selectedLanguage" class="language-select">
+      <option value="en">English</option>
+      <option value="ar">Arabic</option>
+      <!-- Add more languages as needed -->
+    </select>
+  </div>
+
   <div class="content">
-    <!-- <img class="bg-icon" (click)="reloadPage()" src="./assets/images/icon.png" /> -->
     <div class="container">
       <router-outlet></router-outlet>
     </div>  
-  
   </div>
 
-  <!-- @if (screenWidth > 1000) {
-    <img class="imgs-width icon-bottom-left" src="./assets/images/icon-bottom-left.png"/>
-    <img class="imgs-width icon-top-left" src="./assets/images/icon-top-left.png"/>
-    <img class="imgs-width icon-bottom-right" src="./assets/images/icon-bottom-right.png"/>
-    <img class="imgs-width icon-top-right" src="./assets/images/icon-top-right.png"/>
-  } -->
-
-
-  <!-- <div class="footer">
-    <a>Developed by Libanux Software Solutions.</a>
-  </div> -->
 </div>

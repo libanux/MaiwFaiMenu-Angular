@@ -1,6 +1,5 @@
 <div class="category-view">
-  <!-- Animated background particles -->
-  <div class="bg-particles" id="particles"></div>
+  
   
   <div class="menu-banner">
     <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2000"
@@ -8,60 +7,54 @@
          class="banner-image">
   </div>
 
-  <div class="main-content">
-    <h1 class="category-title">{{ categoryName }}</h1>
-    
-    <!-- Show subcategories if they exist and not loading -->
-    <div class="subcategories-container" *ngIf="!loading && subcategories && subcategories.length > 0">
-      <div class="subcategory-card" *ngFor="let subcategory of subcategories">
-        <div class="subcategory-header" (click)="toggleSubcategory(subcategory)">
-          <div class="subcategory-info">
-            <img *ngIf="subcategory.icon"
-                 [src]="subcategory.icon"
-                 [alt]="subcategory.name"
-                 class="subcategory-icon">
-            <h2 class="subcategory-name">{{ subcategory.name }}</h2>
-          </div>
-          <i class="fas fa-chevron-down expand-icon"
-             [class.expanded]="subcategory.isExpanded"></i>
+  <div *ngIf="loading" class="loader-container">
+  <div class="loader"></div>
+</div>
+
+<div *ngIf="!loading">
+  <div *ngIf="categories.length === 0" class="empty-message">
+    {{ selectedLanguage === 'ar' ? 'لا توجد فئات' : 'No categories' }}
+  </div>
+
+  <div *ngIf="categories.length > 0" class="categories-list">
+    <div 
+      class="category-card"
+      *ngFor="let category of categories"
+    >
+      <div class="category-header" (click)="toggleCategory(category.name)">
+        <!-- For category icon -->
+        <img *ngIf="category.icon && category.icon.trim() !== ''" [src]="category.icon" alt="icon" class="category-icon" />
+        <span class="category-title">{{ category.name }}</span>
+        <span class="dropdown-arrow" [class.open]="openedCategory === category.name">&#9660;</span>
+      </div>
+
+      <div 
+        class="items-section"
+        *ngIf="openedCategory === category.name"
+      >
+        <div *ngIf="category.items.length === 0" class="empty-message">
+          {{ selectedLanguage === 'ar' ? 'لا توجد عناصر' : 'No items' }}
         </div>
-        
-        <div class="items-container"
-             [class.expanded]="subcategory.isExpanded">
-          <!-- Show items if they exist -->
-          <div class="items-grid" *ngIf="subcategory.items && subcategory.items.length > 0">
-            <div class="item-card" *ngFor="let item of subcategory.items">
-              <div class="item-image" *ngIf="item.ITEM_PHOTO">
-                <img [src]="item.ITEM_PHOTO" [alt]="item.ITEM_NAME">
-              </div>
-              <div class="item-content">
-                <h3 class="item-name">{{ item.ITEM_NAME }}</h3>
-                <p class="price">${{ item.ITEM_PRICE }}</p>
-                <p class="description" *ngIf="item.DESCRIPTION">{{ item.DESCRIPTION }}</p>
+        <div *ngIf="category.items.length > 0" class="items-grid">
+          <div 
+            class="item-card"
+            *ngFor="let item of category.items"
+          >
+            <!-- For item photo -->
+            <img *ngIf="item.ITEM_PHOTO && item.ITEM_PHOTO.trim() !== ''" [src]="item.ITEM_PHOTO" alt="item" class="item-image" />
+            <div class="item-info">
+              <h3 class="item-name">{{ getItemName(item) }}</h3>
+              <p class="item-description">{{ getItemDescription(item) }}</p>
+              <div class="item-price">
+                {{ item.ITEM_PRICE }} <span class="currency">₪</span>
               </div>
             </div>
-          </div>
-          
-          <!-- Show empty items message if no items -->
-          <div class="empty-items" *ngIf="!subcategory.items || subcategory.items.length === 0">
-            <i class="fas fa-glass-martini-alt empty-items-icon"></i>
-            <p class="empty-items-message">No items available in this category</p>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Show empty subcategories message if no subcategories -->
-    <div class="empty-state" *ngIf="!loading && (!subcategories || subcategories.length === 0)">
-      <i class="fas fa-utensils empty-state-icon"></i>
-      <h3 class="empty-state-title">No Subcategories Available</h3>
-      <p class="empty-state-message">There are currently no subcategories in this section. </p>
-    </div>
-
-    <!-- Loading spinner -->
-    <div class="loading-spinner" *ngIf="loading">
-      <div class="spinner"></div>
-      <p>Loading delicious items...</p>
-    </div>
   </div>
+</div>
+
+  
 </div>

@@ -1,83 +1,82 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FirebaseService } from '../services/firebase.service';
-import { Subscription } from 'rxjs';
-
-interface SubcategoryItem {
-  name: string;
-  icon: string;
-  isExpanded: boolean;
-  items: any[];
-}
+import { ItemsService } from '../services/items.service';
+import { LanguageService } from '../services/language.service';
+import { Item } from '../Classes/Item';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-category-view',
+  selector: 'app-categoryview',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './category-view.component.html',
   styleUrls: ['./category-view.component.css']
 })
-export class CategoryViewComponent implements OnInit, OnDestroy {
-  private route = inject(ActivatedRoute);
-  private firebaseService = inject(FirebaseService);
-  private subscription?: Subscription;
-
-  categoryName: string = '';
-  subcategories: SubcategoryItem[] = [];
+export class CategoryviewComponent implements OnInit {
+  items: Item[] = [];
+  categories: { name: string; icon: string; items: Item[] }[] = [];
+  selectedLanguage: 'en' | 'ar' = 'en';
+  selectedType: string = 'restaurant';
+  openedCategory: string | null = null;
   loading = true;
 
+  constructor(
+    private itemsService: ItemsService,
+    private languageService: LanguageService,
+    private route: ActivatedRoute
+  ) {}
+
   ngOnInit() {
-    this.subscription = this.route.params.subscribe(params => {
-      this.categoryName = params['category'];
-      this.loadSubcategories();
+    // Listen for language changes
+    this.languageService.language$.subscribe(lang => {
+      this.selectedLanguage = lang as 'en' | 'ar';
+      this.setCategories();
+      this.openedCategory = null; // Optionally close opened category on language change
+    });
+
+    // Listen for type changes (from menu navigation)
+    this.route.queryParams.subscribe(params => {
+      this.selectedType = params['type'] || 'restaurant';
+      this.loadItems();
     });
   }
 
-  private loadSubcategories() {
-    this.firebaseService.getItems().subscribe({
-      next: (items: any[]) => {
-        // Filter items for this category
-        const categoryItems = items.filter(item => 
-          item.CATEGORY_NAME === this.categoryName && 
-          item.IS_PUBLISHED !== false
-        );
+  loadItems() {
+    this.loading = true;
+    this.itemsService.getItems().subscribe((items: Item[]) => {
+      this.items = items.filter(item => item.TYPE === this.selectedType);
+      this.setCategories();
+      this.loading = false;
+    });
+  }
 
-        // Group by subcategory
-        const subcategoryMap = new Map<string, any[]>();
-        categoryItems.forEach(item => {
-          if (item.SUBCATEGORY_NAME) {
-            if (!subcategoryMap.has(item.SUBCATEGORY_NAME)) {
-              subcategoryMap.set(item.SUBCATEGORY_NAME, []);
-            }
-            subcategoryMap.get(item.SUBCATEGORY_NAME)?.push(item);
-          }
-        });
-
-        // Convert to array and sort
-        this.subcategories = Array.from(subcategoryMap.entries())
-          .map(([name, items]) => ({
-            name,
-            icon: items[0]?.SUBCATEGORY_ICON || '',
-            isExpanded: false,
-            items: items.sort((a, b) => a.ITEM_NAME.localeCompare(b.ITEM_NAME))
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name));
-
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading subcategories:', error);
-        this.loading = false;
+  setCategories() {
+    const categoryMap: { [key: string]: { name: string; icon: string; items: Item[] } } = {};
+    this.items.forEach(item => {
+      const catName = this.selectedLanguage === 'ar' ? item.CATEGORY_NAME_AR : item.CATEGORY_NAME_EN;
+      if (catName && !categoryMap[catName]) {
+        categoryMap[catName] = {
+          name: catName,
+          icon: item.CATEGORY_ICON,
+          items: []
+        };
+      }
+      if (catName) {
+        categoryMap[catName].items.push(item);
       }
     });
+    this.categories = Object.values(categoryMap);
   }
 
-  toggleSubcategory(subcategory: SubcategoryItem) {
-    subcategory.isExpanded = !subcategory.isExpanded;
+  toggleCategory(categoryName: string) {
+    this.openedCategory = this.openedCategory === categoryName ? null : categoryName;
   }
 
-  ngOnDestroy() {
-    this.subscription?.unsubscribe();
+  getItemName(item: Item) {
+    return this.selectedLanguage === 'ar' ? item.ITEM_NAME_AR : item.ITEM_NAME_EN;
+  }
+
+  getItemDescription(item: Item) {
+    return this.selectedLanguage === 'ar' ? item.DESCRIPTION_AR : item.DESCRIPTION_EN;
   }
 }
