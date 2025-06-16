@@ -24,6 +24,23 @@
 
 <div class="wrapper">
 
+  <!-- Category Carousel Section -->
+<div class="category-carousel-wrapper" *ngIf="categories.length > 0">
+  <button class="carousel-arrow left" (click)="scrollCarousel('left')">&#8592;</button>
+  <div class="category-carousel" #carousel>
+    <div
+      class="carousel-category-box"
+      *ngFor="let category of categories"
+      [class.active]="openedCategory === category.name"
+      (click)="onCarouselCategoryClick(category.name)"
+    >
+      <img *ngIf="category.icon && category.icon.trim() !== ''" [src]="category.icon" alt="icon" class="carousel-category-icon" />
+      <div class="carousel-category-name">{{ category.name }}</div>
+    </div>
+  </div>
+  <button class="carousel-arrow right" (click)="scrollCarousel('right')">&#8594;</button>
+</div>
+
 <div class="type-address-phone">
   <span class="business-type">{{ selectedType }}</span>
 
@@ -49,6 +66,7 @@
   <div *ngIf="categories.length > 0" class="categories-list">
     <div  class="category-card"
       *ngFor="let category of categories"
+      [id]="'cat-' + slugify(category.name)"
     >
       <div class="category-header" (click)="toggleCategory(category.name)">
         <!-- For category icon -->
@@ -104,3 +122,4 @@
 <div class="categories-grid" *ngIf="!loading">
   
 </div>
+

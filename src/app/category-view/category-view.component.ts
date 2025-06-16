@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ItemsService } from '../services/items.service';
 import { LanguageService } from '../services/language.service';
@@ -19,6 +19,8 @@ export class CategoryviewComponent implements OnInit {
   selectedType: string = 'restaurant';
   openedCategory: string | null = null;
   loading = true;
+
+  @ViewChild('carousel', { static: false }) carouselRef!: ElementRef<HTMLDivElement>; // added for carousel
 
   constructor(
     private itemsService: ItemsService,
@@ -84,5 +86,32 @@ export class CategoryviewComponent implements OnInit {
     const select = event.target as HTMLSelectElement;
     this.selectedLanguage = select.value as 'en' | 'ar';
     this.languageService.setLanguage(this.selectedLanguage);
+  }
+
+  // ===== Carousel logic below =====
+
+  scrollCarousel(direction: 'left' | 'right') {
+    const carousel = this.carouselRef?.nativeElement;
+    if (carousel) {
+      const scrollAmount = 120; // Adjust based on box width
+      carousel.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  onCarouselCategoryClick(categoryName: string) {
+    this.openedCategory = categoryName;
+    setTimeout(() => {
+      const el = document.getElementById('cat-' + this.slugify(categoryName));
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+      }
+    }, 100);
+  }
+
+  slugify(str: string): string {
+    return str.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
   }
 }

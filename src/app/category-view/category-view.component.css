@@ -757,3 +757,123 @@ body {
 
 }
 
+/* Category carousel styles */
+.category-carousel-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0 1.5rem 0;
+  gap: 0.5rem;
+  
+}
+
+.category-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 0.5rem 0.5rem;
+  max-width: 90vw;
+ scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;
+   scroll-snap-type: x mandatory;
+  
+  
+}
+category-carousel::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari, Opera */
+}
+
+.carousel-category-box {
+  background: rgba(255,255,255,0.13);
+  border-radius:5px;
+   box-shadow: 0 2px 6px rgba(0,0,0,0.10), 0 1px 3px rgba(33,204,147,0.04);
+  border: 2px solid transparent;
+  width:450px;
+  min-width:200px;
+  max-width:450px;
+  padding: 0.7rem 0.5rem 0.5rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+  user-select: none;
+   scroll-snap-align: center;
+}
+
+
+.carousel-category-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  background: #fff;
+}
+
+.carousel-category-name {
+  font-size: 1rem;
+  color: #454444;
+  font-weight:300;
+  text-align: center;
+  margin-top: 0.2rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 90px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.carousel-arrow {
+  background: #21cc93;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(33,204,147,0.10);
+}
+.carousel-arrow:hover {
+  background: #179e6e;
+}
+.carousel-category-box.active {
+  
+  background:black;
+  
+}
+.carousel-category-box.active .carousel-category-name {
+  color:white;
+  
+}
+
+@media (max-width: 600px) {
+  .category-carousel-wrapper {
+    margin: 1rem 0 1rem 0;
+  }
+  .carousel-category-box {
+    min-width: 70px;
+    max-width: 90px;
+    padding: 0.5rem 0.3rem 0.3rem 0.3rem;
+  }
+  .carousel-category-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .carousel-category-name {
+    font-size: 0.92rem;
+    max-width: 70px;
+  }
+  .carousel-arrow {
+    width: 1.7rem;
+    height: 1.7rem;
+    font-size: 1rem;
+  }
+}
+
