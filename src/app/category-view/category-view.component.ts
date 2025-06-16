@@ -79,4 +79,10 @@ export class CategoryviewComponent implements OnInit {
   getItemDescription(item: Item) {
     return this.selectedLanguage === 'ar' ? item.DESCRIPTION_AR : item.DESCRIPTION_EN;
   }
+
+  onLanguageChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.selectedLanguage = select.value as 'en' | 'ar';
+    this.languageService.setLanguage(this.selectedLanguage);
+  }
 }

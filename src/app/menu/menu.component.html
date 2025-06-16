@@ -25,19 +25,14 @@
   <!-- Enhanced Items Scroller Section -->
   <div class="item-scroller-section">
     <div class="item-scroller-track">
-      <img
-        *ngFor="let item of allItems"
-        [src]="item.ITEM_PHOTO"
-        [alt]="item.ITEM_NAME_EN || item.ITEM_NAME_AR"
-        class="scroller-image"
-      />
-      <!-- Duplicate images for seamless loop -->
-      <img
-        *ngFor="let item of allItems"
-        [src]="item.ITEM_PHOTO"
-        [alt]="item.ITEM_NAME_EN || item.ITEM_NAME_AR"
-        class="scroller-image"
-      />
+      <ng-container *ngFor="let item of allItems">
+        <img
+          *ngIf="item.ITEM_PHOTO && item.ITEM_PHOTO.trim() !== ''"
+          [src]="item.ITEM_PHOTO"
+          [alt]="item.ITEM_NAME_EN || item.ITEM_NAME_AR"
+          class="scroller-image"
+        />
+      </ng-container>
     </div>
   </div>
 

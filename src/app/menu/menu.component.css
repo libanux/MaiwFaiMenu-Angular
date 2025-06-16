@@ -51,9 +51,9 @@
 .res-social{
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 90%;
   border: solid rgb(143, 138, 138) 1px;
-  border-radius:20px;
+  border-radius:25px;
   padding:1rem;
 
 }
@@ -61,59 +61,69 @@
 /* Enhanced Restaurant Name Styling */
 .res-name {
   font-family: 'Caprasimo', serif;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 900;
-  color: #ff6b35;
-  letter-spacing: 0.15em;
+  color: #fff;
+  letter-spacing: 0.18em;
   text-align: center;
-  margin-bottom: 0.5rem;
   display: inline-block;
-  padding: 0.4em 1.2em 0.3em 1.2em;
+  padding: 0.5em ;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ff8800 0%, #ffb347 100%);
+  border-radius: 2.5em 2.5em 1.5em 1.5em / 2.5em 2.5em 1.5em 1.5em;
+  box-shadow:
+    0 6px 32px 0 rgba(255, 136, 0, 0.18),
+    0 2px 0 #fff,
+    0 8px 24px 0 rgba(255, 204, 51, 0.13);
   position: relative;
-  background: linear-gradient(135deg, #fff9f0 0%, #ffebe0 100%);
-  border-radius: 25px;
-  border: 2px solid #ff8a65;
-  box-shadow: 
-    0 4px 15px rgba(255, 107, 53, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  transform: perspective(200px) rotateX(8deg);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-shadow: 0 1px 2px rgba(255, 107, 53, 0.3);
+  text-shadow:
+    0 2px 8px rgba(255, 136, 0, 0.18),
+    0 1px 0 #fff;
+  border: 3px solid #ffb347;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.3s;
+  list-style: 5px;
 }
 
 .res-name::before {
-  content: '✨';
+  content: '';
   position: absolute;
-  left: -8px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.2rem;
-  opacity: 0.8;
+  top: 13%;
+  left: 12%;
+  width: 76%;
+  height: 28%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.05) 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(0.5px);
 }
 
 .res-name::after {
-  content: '✨';
+  content: '';
   position: absolute;
-  right: -8px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.2rem;
-  opacity: 0.8;
+  left: 20%;
+  bottom: -10px;
+  width: 60%;
+  height: 8px;
+  background: radial-gradient(ellipse at center, #fffbe6 60%, transparent 100%);
+  opacity: 0.38;
+  border-radius: 50%;
+  z-index: 0;
 }
 
 .res-name:hover {
-  transform: perspective(200px) rotateX(0deg) scale(1.05);
-  color: #e64a19;
-  box-shadow: 
-    0 8px 25px rgba(255, 107, 53, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  border-color: #ff5722;
+  box-shadow:
+    0 12px 48px 0 rgba(255, 136, 0, 0.22),
+    0 2px 0 #fff,
+    0 8px 32px 0 rgba(255, 204, 51, 0.18);
+  transform: scale(1.06) rotate(-2deg);
 }
 
 /* Enhanced Social Icons Styling */
 .social {
   display: flex;
-  gap: 1.8rem;
+  gap: 0.5rem;
   justify-content: center;
   align-items: center;
   margin-top: 0.5rem;
@@ -596,7 +606,7 @@ body, html {
  border-radius:40px;
  width:250px;
  max-width:250px;
- min-width:50px;
+ 
 }
 
 .big-title span{
@@ -621,11 +631,11 @@ height: 200px;
 @media screen and (max-width: 768px) {
   .res-name {
     font-size: 1.4rem;
-    padding: 0.3em 1em 0.2em 1em;
+    padding: 0.3em;
   }
   
   .social {
-    gap: 1.5rem;
+    gap: 0.5rem;
   }
   
   .social a {
@@ -673,7 +683,7 @@ height: 200px;
   }
   
   .social {
-    gap: 1.2rem;
+    gap: 0.5rem;
   }
   
   .social a {
@@ -715,4 +725,26 @@ height: 200px;
   transform: scale(1.06) translateY(-3px);
   transition: transform 0.2s, text-shadow 0.2s;
   cursor: pointer;
+}
+
+@media (max-width: 346px) {
+  .big-title {
+  width:200px;
+ 
+  }
+
+  .res-name {
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+     padding-top:6px;
+  }
+  .social{
+    gap: 0.2rem;
+  }
+
+   .social a {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
 }

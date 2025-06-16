@@ -30,11 +30,7 @@ export class AppComponent {
     }
     
   }
-  onLanguageChange(event: Event) {
-  const select = event.target as HTMLSelectElement;
-  this.selectedLanguage = select.value;
-  this.languageService.setLanguage(this.selectedLanguage);
-}
+ 
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {

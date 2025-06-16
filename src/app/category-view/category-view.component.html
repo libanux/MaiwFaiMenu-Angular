@@ -1,24 +1,53 @@
 <div class="category-view">
   
+  <div class="language-selector-wrapper">
+  <label for="language-select" class="language-label">🌐 Language:</label>
+  <select id="language-select" (change)="onLanguageChange($event)" [value]="selectedLanguage" class="language-select">
+    <option value="en">English</option>
+    <option value="ar">Arabic</option>
+  </select>
+</div>
   
-  <div class="menu-banner">
-    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=2000"
-         alt="Delicious Food Banner"
-         class="banner-image">
-  </div>
-
-  <div *ngIf="loading" class="loader-container">
-  <div class="loader"></div>
+  <div
+  class="menu-banner"
+  [ngStyle]="{
+    'background-image': selectedType === 'restaurant'
+      ? 'url(https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80)'
+      : 'url(../../assets/images/cofe-back.jpg)',
+      'background-position': selectedType === 'coffeh' ? 'bottom center' : 'center'
+  }"
+>
+  <span *ngIf="selectedType === 'restaurant'">Good food, good mood.</span>
+  <span *ngIf="selectedType === 'caffeh'">Coffee is always a good idea.</span>
 </div>
 
+
+<div class="wrapper">
+
+<div class="type-address-phone">
+  <span class="business-type">{{ selectedType }}</span>
+
+  <div class="contact-info">
+  <div class="business-address">
+    <i class="fas fa-map-marker-alt location-icon"></i>
+    <a class="address-text">Eatvite Restaurant, Bliss, Lebanon</a>
+  </div>
+   <span class="contact-separator"></span>
+  <div class="business-phone">
+    <i class="fas fa-phone-alt phone-icon"></i>
+    <a class="phone-text">76006748</a>
+  </div>
+</div>
+</div>
+
+ 
 <div *ngIf="!loading">
   <div *ngIf="categories.length === 0" class="empty-message">
     {{ selectedLanguage === 'ar' ? 'لا توجد فئات' : 'No categories' }}
   </div>
 
   <div *ngIf="categories.length > 0" class="categories-list">
-    <div 
-      class="category-card"
+    <div  class="category-card"
       *ngFor="let category of categories"
     >
       <div class="category-header" (click)="toggleCategory(category.name)">
@@ -35,9 +64,18 @@
         <div *ngIf="category.items.length === 0" class="empty-message">
           {{ selectedLanguage === 'ar' ? 'لا توجد عناصر' : 'No items' }}
         </div>
-        <div *ngIf="category.items.length > 0" class="items-grid">
+        
+        <!-- Loader for items -->
+        <div *ngIf="loading" class="items-loader">
+          <div class="spinner"></div>
+          <span>Loading items...</span>
+        </div>
+
+        <!-- Items grid (shown when not loading) -->
+        <div class="items-grid" *ngIf="!loading">
           <div 
             class="item-card"
+            [ngClass]="{'single-item': category.items.length === 1}"
             *ngFor="let item of category.items"
           >
             <!-- For item photo -->
@@ -46,7 +84,7 @@
               <h3 class="item-name">{{ getItemName(item) }}</h3>
               <p class="item-description">{{ getItemDescription(item) }}</p>
               <div class="item-price">
-                {{ item.ITEM_PRICE }} <span class="currency">₪</span>
+               <span class="currency">$</span> {{ item.ITEM_PRICE }}.00
               </div>
             </div>
           </div>
@@ -55,6 +93,14 @@
     </div>
   </div>
 </div>
+</div>
+  
+</div>
 
+<div *ngIf="loading" class="categories-loader">
+  <div class="spinner"></div>
+  <span>Loading</span>
+</div>
+<div class="categories-grid" *ngIf="!loading">
   
 </div>
