@@ -235,7 +235,7 @@ body {
   /* Remove width: 300px; */
 }
 .single-item  {
-  width:40%;
+  width:25%;
   
 }
 
@@ -474,9 +474,7 @@ body {
 
 
 .language-selector-wrapper {
-  position: fixed;
-  top: 1.5rem;
-  right: 2rem;
+  
   z-index: 1000;
   background: #fff;
   border-radius: 12px;
@@ -485,6 +483,10 @@ body {
   display: flex;
   align-items: center;
   gap: 0.7rem;
+  height: 3rem; 
+  cursor: pointer;
+  
+
 }
 
 .language-label {
@@ -492,6 +494,7 @@ body {
   color: #4ECCA3;
   font-weight: 600;
   letter-spacing: 1px;
+  cursor: pointer;
 }
 
 .language-select {
@@ -504,15 +507,18 @@ body {
   font-weight: 500;
   outline: none;
   transition: border 0.2s;
+  cursor: pointer;
 }
 
 .language-select:focus {
   border-color: #393E46;
+  cursor: pointer;
 }
 
 .language-select option {
   color: #222;
   background: #fff;
+  cursor: pointer;
 }
 
 
@@ -826,13 +832,13 @@ category-carousel::-webkit-scrollbar {
 }
 
 .carousel-arrow {
-  background: #21cc93;
+   background: rgba(0, 0, 0, 0.45);
   color: #fff;
   border: none;
   border-radius: 50%;
-  width: 2.2rem;
-  height: 2.2rem;
-  font-size: 1.3rem;
+  width:4rem;
+  height:1.7rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -841,7 +847,7 @@ category-carousel::-webkit-scrollbar {
   box-shadow: 0 2px 8px rgba(33,204,147,0.10);
 }
 .carousel-arrow:hover {
-  background: #179e6e;
+  background: rgba(0, 0, 0, 0.7);
 }
 .carousel-category-box.active {
   
@@ -853,14 +859,17 @@ category-carousel::-webkit-scrollbar {
   
 }
 
+.carousel-arrow.right {
+  margin-right: 1rem; /* Adjust as needed */
+}
+
 @media (max-width: 600px) {
   .category-carousel-wrapper {
     margin: 1rem 0 1rem 0;
   }
   .carousel-category-box {
-    min-width: 70px;
-    max-width: 90px;
-    padding: 0.5rem 0.3rem 0.3rem 0.3rem;
+    width:400px;
+    
   }
   .carousel-category-icon {
     width: 36px;
@@ -877,3 +886,61 @@ category-carousel::-webkit-scrollbar {
   }
 }
 
+.back-arrow-btn {
+ z-index: 1000;
+  background: #fff;
+  border: none;
+  border-radius: 12px;
+  width: 2.7rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(33,204,147,0.10);
+  cursor: pointer;
+  transition: background 0.2s;
+  padding: 0;
+  color: #222;
+}
+.back-arrow-btn:hover {
+  background: #e6fcf5;
+}
+
+
+
+
+.top-fixed-buttons {
+  position: fixed;
+  width: 100%;
+  padding: 1rem;
+   top: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  gap: 1.2rem;
+ 
+  /* background: transparent;
+  box-shadow: none; */
+  /* transition: background 0.2s, box-shadow 0.2s; */
+}
+
+.top-fixed-buttons.white-bg {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 12px rgba(37, 38, 38, 0.18), 0 6px 12px rgba(0,0,0,0.10);
+  border-radius: 16px;
+}
+
+.back-arrow-btn.black-bg {
+  background: #111 !important;
+}
+.back-arrow-btn.black-bg svg path {
+  stroke: #fff !important;
+}
+
+/* Language selector: box shadow when after menu-banner */
+.language-selector-wrapper.lang-shadow {
+  box-shadow: 0 4px 12px rgba(33,204,147,0.18), 0 6px 12px rgba(0,0,0,0.10);
+  border-radius: 12px;
+  background: #fff;
+}

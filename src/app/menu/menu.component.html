@@ -23,18 +23,21 @@
   </div>
 
   <!-- Enhanced Items Scroller Section -->
-  <div class="item-scroller-section">
-    <div class="item-scroller-track">
-      <ng-container *ngFor="let item of allItems">
+ <div class="item-scroller-section">
+  <div class="item-scroller-track" #itemScroller>
+    <ng-container *ngFor="let item of allItems.concat(allItems)">
+      <div class="scroller-image-box">
         <img
           *ngIf="item.ITEM_PHOTO && item.ITEM_PHOTO.trim() !== ''"
           [src]="item.ITEM_PHOTO"
           [alt]="item.ITEM_NAME_EN || item.ITEM_NAME_AR"
           class="scroller-image"
         />
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
   </div>
+  
+</div>
 
   <!-- Big Titles Section -->
   <div class="big-titles-section">

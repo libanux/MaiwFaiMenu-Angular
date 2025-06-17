@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ItemsService } from '../services/items.service';
 import { LanguageService } from '../services/language.service';
 import { Item } from '../Classes/Item';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-categoryview',
@@ -12,20 +13,24 @@ import { CommonModule } from '@angular/common';
   templateUrl: './category-view.component.html',
   styleUrls: ['./category-view.component.css']
 })
-export class CategoryviewComponent implements OnInit {
+export class CategoryviewComponent implements OnInit, AfterViewInit {
   items: Item[] = [];
   categories: { name: string; icon: string; items: Item[] }[] = [];
   selectedLanguage: 'en' | 'ar' = 'en';
   selectedType: string = 'restaurant';
   openedCategory: string | null = null;
   loading = true;
+  backArrowBlack = false;
+  afterMenuBanner = false;
 
   @ViewChild('carousel', { static: false }) carouselRef!: ElementRef<HTMLDivElement>; // added for carousel
+  @ViewChild('menuBanner', { static: false }) menuBannerRef!: ElementRef;
 
   constructor(
     private itemsService: ItemsService,
     private languageService: LanguageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+     private router: Router
   ) {}
 
   ngOnInit() {
@@ -41,6 +46,10 @@ export class CategoryviewComponent implements OnInit {
       this.selectedType = params['type'] || 'restaurant';
       this.loadItems();
     });
+  }
+
+  ngAfterViewInit() {
+    this.onWindowScroll(); // Initialize scroll position
   }
 
   loadItems() {
@@ -114,4 +123,18 @@ export class CategoryviewComponent implements OnInit {
   slugify(str: string): string {
     return str.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
   }
+
+  goBackToMenu() {
+  // If using Angular router:
+  this.router.navigate(['']); // Adjust '/menu' to your actual menu route
+}
+
+@HostListener('window:scroll', [])
+onWindowScroll() {
+  if (this.menuBannerRef) {
+    console.log(this.afterMenuBanner)
+    const bannerBottom = this.menuBannerRef.nativeElement.getBoundingClientRect().bottom;
+    this.afterMenuBanner = bannerBottom <= 0;
+  }
+}
 }
