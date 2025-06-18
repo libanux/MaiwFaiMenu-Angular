@@ -22,6 +22,8 @@ export class CategoryviewComponent implements OnInit, AfterViewInit {
   loading = true;
   backArrowBlack = false;
   afterMenuBanner = false;
+  atStart = true;
+  atEnd = false;
 
   @ViewChild('carousel', { static: false }) carouselRef!: ElementRef<HTMLDivElement>; // added for carousel
   @ViewChild('menuBanner', { static: false }) menuBannerRef!: ElementRef;
@@ -115,9 +117,21 @@ export class CategoryviewComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       const el = document.getElementById('cat-' + this.slugify(categoryName));
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+        // Get the fixed header height
+        const header = document.querySelector('.top-fixed-buttons') as HTMLElement;
+        const headerOffset = header ? header.offsetHeight : 112; // fallback
+
+        // Get the element's position relative to the document
+        const rect = el.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const offsetTop = rect.top + scrollTop - headerOffset;
+
+        window.scrollTo({
+          top: offsetTop,
+          behavior: 'smooth'
+        });
       }
-    }, 100);
+    }, 400); // Increase timeout if your card expands/collapses
   }
 
   slugify(str: string): string {

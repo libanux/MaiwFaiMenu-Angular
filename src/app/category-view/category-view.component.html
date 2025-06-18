@@ -88,13 +88,10 @@
   </div>
 
   <div *ngIf="categories.length > 0" class="categories-list">
-    <div  class="category-card"
+    <div  class="category-card" [id]="'cat-' + slugify(category.name)"
       *ngFor="let category of categories"
-      [id]="'cat-' + slugify(category.name)"
     >
-      <div class="category-header" (click)="toggleCategory(category.name)">
-        <!-- For category icon -->
-        <img *ngIf="category.icon && category.icon.trim() !== ''" [src]="category.icon" alt="icon" class="category-icon" />
+      <div class="category-header">
         <span class="category-title">{{ category.name }}</span>
         <span class="dropdown-arrow" [class.open]="openedCategory === category.name">&#9660;</span>
       </div>

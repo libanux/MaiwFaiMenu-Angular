@@ -16,6 +16,7 @@ export class MenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('itemScroller', { static: false }) itemScrollerRef!: ElementRef<HTMLDivElement>;
   autoScrollInterval: any;
+  currentIndex = 0;
 
   constructor(
     private router: Router,
@@ -71,5 +72,32 @@ export class MenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goToCategory(type: string) {
     this.router.navigate(['/category'], { queryParams: { type } });
+  }
+
+  scrollImages(direction: 'left' | 'right') {
+    const scroller = this.itemScrollerRef?.nativeElement;
+    if (!scroller) return;
+
+    const boxes = scroller.querySelectorAll('.scroller-image-box');
+    if (!boxes.length) return;
+
+    const isMobile = window.innerWidth <= 600;
+    const visibleCount = isMobile ? 1 : 2;
+    const box = boxes[0] as HTMLElement;
+    const gap = parseFloat(getComputedStyle(scroller).gap || '0');
+    const boxWidth = box.offsetWidth + gap;
+    const maxIndex = boxes.length - visibleCount;
+
+    // Update index
+    if (direction === 'right') {
+      this.currentIndex = Math.min(this.currentIndex + visibleCount, maxIndex);
+    } else {
+      this.currentIndex = Math.max(this.currentIndex - visibleCount, 0);
+    }
+
+    scroller.scrollTo({
+      left: this.currentIndex * boxWidth,
+      behavior: 'smooth'
+    });
   }
 }
