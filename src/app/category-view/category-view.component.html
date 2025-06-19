@@ -91,10 +91,10 @@
     <div  class="category-card" [id]="'cat-' + slugify(category.name)"
       *ngFor="let category of categories"
     >
-      <div class="category-header">
-        <span class="category-title">{{ category.name }}</span>
-        <span class="dropdown-arrow" [class.open]="openedCategory === category.name">&#9660;</span>
-      </div>
+      <div class="category-header" (click)="toggleCategory(category.name)">
+  <span class="category-title">{{ category.name }}</span>
+  <span class="dropdown-arrow" [class.open]="openedCategory === category.name">&#9660;</span>
+</div>
 
       <div 
         class="items-section"

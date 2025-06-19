@@ -1,6 +1,4 @@
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
@@ -407,7 +405,7 @@ body {
 .category-card {
   background: rgba(255, 255, 255, 0.07);
   border-radius: 18px;
-  box-shadow: 0 4px 18px rgba(33, 204, 147, 0.08), 0 1.5px 8px rgba(78, 204, 163, 0.04);
+  
   border: 1.5px solid rgba(33, 204, 147, 0.13);
   margin-bottom: 1.2rem;
   overflow: hidden;
@@ -445,7 +443,7 @@ body {
   color:black;
   letter-spacing: 0.04em;
   flex: 1;
-  text-shadow: 0 2px 8px rgba(33, 204, 147, 0.13);
+  
 }
 
 .dropdown-arrow {
@@ -783,11 +781,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 2rem 0 1.5rem 0;
+  /* margin: 2rem 0 1.5rem 0; */
   gap: 0.5rem;
   position: sticky;
   z-index: 100;
-   top: 112px;
+   top:75px;
   background: inherit;
   background-color: white;
  
@@ -886,7 +884,7 @@ category-carousel::-webkit-scrollbar {
 
 @media (max-width: 600px) {
   .category-carousel-wrapper {
-    margin: 1rem 0 1rem 0;
+    /* margin: 1rem 0 1rem 0; */
   }
   .carousel-category-box {
     width:400px;
@@ -965,4 +963,11 @@ category-carousel::-webkit-scrollbar {
   box-shadow: 0 4px 12px rgba(33,204,147,0.18), 0 6px 12px rgba(0,0,0,0.10);
   border-radius: 12px;
   background: #fff;
+}
+
+.top-fixed-buttons,
+.category-carousel-wrapper {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
 }
