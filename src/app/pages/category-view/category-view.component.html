@@ -1,0 +1,200 @@
+<div class="category-view" [attr.dir]="selectedLanguage === 'ar' ? 'rtl' : 'ltr'">
+  <!-- Floating Action Button - Back -->
+  <button class="fab-back" [class.elevated]="afterMenuBanner" (click)="goBackToMenu()" aria-label="Back to menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- Enhanced Language Selector -->
+  <div class="language-fab" [class.elevated]="afterMenuBanner">
+    <select (change)="onLanguageChange($event)" [value]="selectedLanguage" class="language-select-modern">
+      <option value="en">English</option>
+      <option value="ar">عربي</option>
+    </select>
+  </div>
+  
+  <!-- Hero Banner with Material Design -->
+  <div class="hero-banner" #menuBanner [ngStyle]="{
+    'background-image': selectedType === 'restaurant'
+      ? 'url(https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80)'
+      : 'url(../../assets/images/cofe-back.jpg)',
+      'background-position': selectedType === 'caffeh' ? 'bottom center' : 'center'
+  }">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+      <div class="banner-text">
+        <h1 class="banner-title">{{ selectedLanguage === 'ar' ? 'ميّ و فيّ' : 'Mai w Fai' }}</h1>
+        <p class="banner-subtitle" *ngIf="selectedType === 'restaurant'">
+          {{ selectedLanguage === 'ar' ? 'طعام جيد، مزاج جيد.' : 'Good food, good mood.' }}
+        </p>
+        <p class="banner-subtitle" *ngIf="selectedType === 'caffeh'">
+          {{ selectedLanguage === 'ar' ? 'القهوة دائماً فكرة جيدة.' : 'Coffee is always a good idea.' }}
+        </p>
+      </div>
+      <div class="banner-stats">
+        <div class="stat-chip">
+          <i class="fas fa-utensils"></i>
+          <span>{{ categories.length }} {{ selectedLanguage === 'ar' ? 'فئة' : 'Categories' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Business Info Card -->
+    <div class="business-info-card">
+      <div class="business-header">
+        <div class="business-type-chip">
+          {{ selectedLanguage === 'ar' ? (selectedType === 'restaurant' ? 'مطعم' : 'مقهى') : (selectedType | titlecase) }}
+        </div>
+      </div>
+      
+      <div class="contact-info-grid">
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">{{ selectedLanguage === 'ar' ? 'الموقع' : 'Location' }}</span>
+            <span class="contact-value">{{ selectedLanguage === 'ar' ? 'مطعم ميّ و فيّ، بليس، لبنان' : 'Eatvite Restaurant, Bliss, Lebanon' }}</span>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-phone-alt"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">{{ selectedLanguage === 'ar' ? 'الهاتف' : 'Phone' }}</span>
+            <span class="contact-value">+961 76 006 748</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Navigation Chips -->
+    <div class="category-navigation" *ngIf="categories.length > 0">
+      <div class="nav-chips-container" #carousel>
+        <div class="nav-chip" 
+             *ngFor="let category of categories"
+             [class.active]="openedCategory === category.name"
+             (click)="onCarouselCategoryClick(category.name)">
+          <div class="chip-icon" *ngIf="category.icon && category.icon.trim() !== ''">
+            <img [src]="category.icon" alt="category icon" />
+          </div>
+          <span class="chip-label">{{ category.name }}</span>
+          <div class="chip-count">{{ category.items.length }}</div>
+        </div>
+      </div>
+      
+      <div class="nav-arrows">
+        <button class="nav-arrow left" (click)="scrollCarousel('left')" aria-label="Scroll left">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="nav-arrow right" (click)="scrollCarousel('right')" aria-label="Scroll right">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Categories Content -->
+    <div class="categories-content" *ngIf="!loading">
+      <div *ngIf="categories.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-utensils"></i>
+        </div>
+        <h3 class="empty-title">{{ selectedLanguage === 'ar' ? 'لا توجد فئات' : 'No categories available' }}</h3>
+        <p class="empty-message">{{ selectedLanguage === 'ar' ? 'يرجى المحاولة مرة أخرى لاحقاً' : 'Please try again later' }}</p>
+      </div>
+
+      <!-- Category Cards -->
+      <div class="categories-grid" *ngIf="categories.length > 0">
+        <div class="category-card" 
+             [id]="'cat-' + slugify(category.name)"
+             *ngFor="let category of categories; let i = index"
+             [style.--card-index]="i">
+          
+          <!-- Category Header -->
+          <div class="category-header" (click)="toggleCategory(category.name)">
+            <div class="category-info">
+              <div class="category-icon" *ngIf="category.icon && category.icon.trim() !== ''">
+                <img [src]="category.icon" alt="category icon" />
+              </div>
+              <div class="category-details">
+                <h3 class="category-title">{{ category.name }}</h3>
+                <span class="category-count">{{ category.items.length }} {{ selectedLanguage === 'ar' ? 'عنصر' : 'items' }}</span>
+              </div>
+            </div>
+            <div class="expand-button">
+              <i class="fas fa-chevron-down" [class.rotated]="openedCategory === category.name"></i>
+            </div>
+          </div>
+
+          <!-- Category Items -->
+          <div class="category-items" [class.expanded]="openedCategory === category.name">
+            <div class="items-loading" *ngIf="loading">
+              <div class="loading-spinner"></div>
+              <span>{{ selectedLanguage === 'ar' ? 'جاري تحميل العناصر...' : 'Loading items...' }}</span>
+            </div>
+
+            <div class="items-empty" *ngIf="!loading && category.items.length === 0">
+              <div class="empty-icon">
+                <i class="fas fa-plate-wheat"></i>
+              </div>
+              <p>{{ selectedLanguage === 'ar' ? 'لا توجد عناصر' : 'No items available' }}</p>
+            </div>
+
+            <!-- Items Grid -->
+            <div class="items-grid" *ngIf="!loading && category.items.length > 0">
+              <div class="item-card" 
+                   *ngFor="let item of category.items; let j = index"
+                   [style.--item-index]="j">
+                
+                <div class="item-image-container">
+                  <img *ngIf="item.ITEM_PHOTO && item.ITEM_PHOTO.trim() !== ''" 
+                       [src]="item.ITEM_PHOTO" 
+                       [alt]="getItemName(item)"
+                       class="item-image"
+                       loading="lazy" />
+                  
+                  <div class="item-image-placeholder" *ngIf="!item.ITEM_PHOTO || item.ITEM_PHOTO.trim() === ''">
+                    <i class="fas fa-image"></i>
+                  </div>
+                  
+                  <div class="item-price-badge">
+                    <span class="currency">$</span>
+                    <span class="amount">{{ item.ITEM_PRICE }}</span>
+                  </div>
+                </div>
+
+                <div class="item-content">
+                  <h4 class="item-name">{{ getItemName(item) }}</h4>
+                  <p class="item-description" *ngIf="getItemDescription(item)">
+                    {{ getItemDescription(item) }}
+                  </p>
+                  
+                  <div class="item-actions">
+                    <button class="add-to-cart-btn" aria-label="Add to cart">
+                      <i class="fas fa-plus"></i>
+                      <span>Add</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="loading">
+      <div class="loading-spinner-large"></div>
+      <h3 class="loading-text">{{ selectedLanguage === 'ar' ? 'جاري تحميل القائمة...' : 'Loading menu...' }}</h3>
+      <p class="loading-subtext">{{ selectedLanguage === 'ar' ? 'يرجى الانتظار بينما نحضر قائمتك' : 'Please wait while we prepare your menu' }}</p>
+    </div>
+  </div>
+</div>
+

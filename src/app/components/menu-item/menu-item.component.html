@@ -1,0 +1,16 @@
+
+<button class="dropbtn" (click)="toggleDropdown()">
+    {{title}}
+    <span class="arrow" [class.rotated]="isDropdownOpen">
+     <img src="./assets/images/arrow-btn.png" alt="Arrow Icon"/>
+    </span>
+</button>
+
+    <div *ngIf="isDropdownOpen" [@dropdownAnimation]="isDropdownOpen ? 'open' : 'closed'" class="dropdown-content">
+            <div class="menu-item" *ngFor="let item of menuItems">
+                <span class="item-name">{{ item.ITEM_NAME }}</span>
+                <span class="item-price">{{ item.ITEM_PRICE }}</span>
+            </div>
+        
+    </div>
+

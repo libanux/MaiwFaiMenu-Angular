@@ -1,0 +1,16 @@
+<div class="main">
+
+
+  <div class="content">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>  
+  </div>
+
+  <footer [ngClass]="{ 'footer-menu': isMenuPage, 'footer-default': !isMenuPage }" class="site-footer">
+    <span>
+      Powered by <span class="footer-brand">Libanux</span> | All rights reserved © 2025
+    </span>
+  </footer>
+
+</div> <!-- end of .main -->

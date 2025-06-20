@@ -1,0 +1,25 @@
+button {
+    background-color: #28AFBC;
+    border-radius: 18px;
+    border: none;
+    width: 100%;
+    height: 81px;
+    font-size: 36px;
+    color: #FFFFFF;
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+}   
+
+
+@media (max-width:550px) {
+    button{
+        font-size: 16px;
+        height: 45px;
+    }
+
+   
+}
