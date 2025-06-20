@@ -60,6 +60,6 @@ jobs:
           host: ${{ secrets.VPS_HOST }} # IP address or domain of your VPS
           username: ${{ secrets.VPS_USER }} # SSH username for your VPS
           key: ${{ secrets.SSH_PRIVATE_KEY }} # SSH private key for authentication
-          source: "dist/shadow-db/browser/*" # Source files to copy (contents of the browser directory)
+          source: "dist/area-51-website-nonstandalone/browser/*" # Source files to copy (contents of the browser directory)
           target: ${{ secrets.VPS_DEPLOY_PATH }} # Target directory on your VPS
           strip_components: 3
