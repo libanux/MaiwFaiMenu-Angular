@@ -1,0 +1,146 @@
+<div class="category-view">
+
+<div class="top-fixed-buttons" [class.white-bg]="afterMenuBanner">
+  <button
+    class="back-arrow-btn"
+    [class.black-bg]="afterMenuBanner"
+    (click)="goBackToMenu()"
+    aria-label="Back to menu"
+  >
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M14 18L8 11L14 4" [attr.stroke]="afterMenuBanner ? '#fff' : '#222'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <div class="language-selector-wrapper" [class.lang-shadow]="afterMenuBanner">
+  <label for="language-select" class="language-label">🌐 Language:</label>
+  <select id="language-select" (change)="onLanguageChange($event)" [value]="selectedLanguage" class="language-select">
+    <option value="en">English</option>
+    <option value="ar">Arabic</option>
+  </select>
+</div>
+</div>
+  
+  <div
+  class="menu-banner"
+  #menuBanner
+  [ngStyle]="{
+    'background-image': selectedType === 'restaurant'
+      ? 'url(https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80)'
+      : 'url(../../assets/images/cofe-back.jpg)',
+      'background-position': selectedType === 'coffeh' ? 'bottom center' : 'center'
+  }"
+>
+  <span *ngIf="selectedType === 'restaurant'">Good food, good mood.</span>
+  <span *ngIf="selectedType === 'caffeh'">Coffee is always a good idea.</span>
+</div>
+
+
+<div class="wrapper">
+
+  <!-- Category Carousel Section -->
+<div class="category-carousel-wrapper" *ngIf="categories.length > 0">
+  <button class="carousel-arrow left" (click)="scrollCarousel('left')">
+    <!-- Elegant left arrow SVG -->
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M14 18L8 11L14 4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="category-carousel" #carousel>
+    <div
+      class="carousel-category-box"
+      *ngFor="let category of categories"
+      [class.active]="openedCategory === category.name"
+      (click)="onCarouselCategoryClick(category.name)"
+    >
+      <img *ngIf="category.icon && category.icon.trim() !== ''" [src]="category.icon" alt="icon" class="carousel-category-icon" />
+      <div class="carousel-category-name">{{ category.name }}</div>
+    </div>
+  </div>
+  <button class="carousel-arrow right" (click)="scrollCarousel('right')">
+    <!-- Elegant right arrow SVG -->
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M8 4L14 11L8 18" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</div>
+
+<div class="type-address-phone">
+  <span class="business-type">{{ selectedType }}</span>
+
+  <div class="contact-info">
+  <div class="business-address">
+    <i class="fas fa-map-marker-alt location-icon"></i>
+    <a class="address-text">Eatvite Restaurant, Bliss, Lebanon</a>
+  </div>
+   <span class="contact-separator"></span>
+  <div class="business-phone">
+    <i class="fas fa-phone-alt phone-icon"></i>
+    <a class="phone-text">76006748</a>
+  </div>
+</div>
+</div>
+
+ 
+<div *ngIf="!loading">
+  <div *ngIf="categories.length === 0" class="empty-message">
+    {{ selectedLanguage === 'ar' ? 'لا توجد فئات' : 'No categories' }}
+  </div>
+
+  <div *ngIf="categories.length > 0" class="categories-list">
+    <div  class="category-card" [id]="'cat-' + slugify(category.name)"
+      *ngFor="let category of categories"
+    >
+      <div class="category-header" (click)="toggleCategory(category.name)">
+  <span class="category-title">{{ category.name }}</span>
+  <span class="dropdown-arrow" [class.open]="openedCategory === category.name">&#9660;</span>
+</div>
+
+      <div 
+        class="items-section"
+        *ngIf="openedCategory === category.name"
+      >
+        <div *ngIf="category.items.length === 0" class="empty-message">
+          {{ selectedLanguage === 'ar' ? 'لا توجد عناصر' : 'No items' }}
+        </div>
+        
+        <!-- Loader for items -->
+        <div *ngIf="loading" class="items-loader">
+          <div class="spinner"></div>
+          <span>Loading items...</span>
+        </div>
+
+        <!-- Items grid (shown when not loading) -->
+        <div class="items-grid" *ngIf="!loading">
+          <div 
+            class="item-card"
+            [ngClass]="{'single-item': category.items.length === 1}"
+            *ngFor="let item of category.items"
+          >
+            <!-- For item photo -->
+            <img *ngIf="item.ITEM_PHOTO && item.ITEM_PHOTO.trim() !== ''" [src]="item.ITEM_PHOTO" alt="item" class="item-image" />
+            <div class="item-info">
+              <h3 class="item-name">{{ getItemName(item) }}</h3>
+              <p class="item-description">{{ getItemDescription(item) }}</p>
+              <div class="item-price">
+               <span class="currency">$</span> {{ item.ITEM_PRICE }}.00
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+  
+</div>
+
+<div *ngIf="loading" class="categories-loader">
+  <div class="spinner"></div>
+  <span>Loading</span>
+</div>
+<div class="categories-grid" *ngIf="!loading">
+  
+</div>
+

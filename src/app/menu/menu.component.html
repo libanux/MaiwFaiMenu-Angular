@@ -1,0 +1,61 @@
+<div class="main-outer">
+  <div class="main">
+    <!-- your app content -->
+    <div class="menu-container">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="center-title">
+          <div>
+            <span class="menu-word">ONLINE</span><br />
+            <span class="menu-word">MENU</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-social">
+        <span class="res-name">ميّ و فيّ</span>
+        
+        <div class="social">
+          <a href="https://facebook.com" target="_blank" rel="noopener">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Enhanced Items Scroller Section -->
+     <div class="item-scroller-section">
+      <div class="item-scroller-track" #itemScroller>
+        <ng-container *ngFor="let item of allItems.concat(allItems)">
+          <div class="scroller-image-box">
+            <img
+              *ngIf="item.ITEM_PHOTO && item.ITEM_PHOTO.trim() !== ''"
+              [src]="item.ITEM_PHOTO"
+              [alt]="item.ITEM_NAME_EN || item.ITEM_NAME_AR"
+              class="scroller-image"
+            />
+          </div>
+        </ng-container>
+      </div>
+      
+    </div>
+
+      <!-- Big Titles Section -->
+      <div class="big-titles-section">
+        <div
+          class="big-title"
+          (click)="goToCategory('restaurant')"
+        >
+         <img src="assets/images/resturant-icon.png" alt="My Image">
+          <span>restaurant</span>
+        </div>
+        <div class="big-title" (click)="goToCategory('caffeh')">
+          <img src="assets/images/coffeh2.png" alt="My Image" class="coffeh-image">
+          <span>cafe</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
