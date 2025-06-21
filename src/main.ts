@@ -7,11 +7,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from './environments/environment';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     provideAnimations(),
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     importProvidersFrom(
       AngularFireModule.initializeApp(environment.firebase),
       AngularFireDatabaseModule
