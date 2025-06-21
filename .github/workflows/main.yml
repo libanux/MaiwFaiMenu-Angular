@@ -1,0 +1,65 @@
+name: Angular CI/CD
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Block direct pushes (require PR merge)
+        if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
+        run: |
+          echo "🔍 Checking if push came from an allowed user..."
+          ALLOWED_USER="Alihaydr"
+          echo "Actor: ${{ github.actor }}"
+          echo "Pusher: ${{ github.event.pusher.name }}"
+          if [ "${{ github.event.pusher.name }}" != "$ALLOWED_USER" ]; then
+            echo "❌ Direct push to main is not allowed. Please use a PR."
+            exit 1
+          else
+            echo "✅ Allowed user pushed. Continuing..."
+          fi
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22 # Use Node.js 22
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Angular project
+        run: npm run build
+
+      - name: Clear existing files on the server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            rm -rf ${{ secrets.VPS_DEPLOY_PATH }}/*
+      - name: Deploy to VPS using SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }} # IP address or domain of your VPS
+          username: ${{ secrets.VPS_USER }} # SSH username for your VPS
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # SSH private key for authentication
+          source: "dist/area-51-website-nonstandalone/browser/*" # Source files to copy (contents of the browser directory)
+          target: ${{ secrets.VPS_DEPLOY_PATH }} # Target directory on your VPS
+          strip_components: 3
