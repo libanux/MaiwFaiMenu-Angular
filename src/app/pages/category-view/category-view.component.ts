@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ItemsService, LanguageService } from '../../services';
+import { CategoryService } from '../../services/category.service';
 import { Item } from '../../Classes';
+import { Category } from '../../Classes/category';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -15,74 +17,66 @@ import { Router } from '@angular/router';
 })
 export class CategoryviewComponent implements OnInit, AfterViewInit {
   items: Item[] = [];
-  categories: { name: string; icon: string; items: Item[] }[] = [];
+  categories: Category[] = [];
   selectedLanguage: 'en' | 'ar' = 'en';
-  selectedType: string = 'restaurant';
+  selectedType: 'restaurant' | 'caffeh' = 'restaurant';
   openedCategory: string | null = null;
   loading = true;
-  backArrowBlack = false;
   afterMenuBanner = false;
-  atStart = true;
-  atEnd = false;
 
-  @ViewChild('carousel', { static: false }) carouselRef!: ElementRef<HTMLDivElement>; // added for carousel
+  @ViewChild('carousel', { static: false }) carouselRef!: ElementRef<HTMLDivElement>;
   @ViewChild('menuBanner', { static: false }) menuBannerRef!: ElementRef;
 
   constructor(
     private itemsService: ItemsService,
+    private categoryService: CategoryService,
     private languageService: LanguageService,
     private route: ActivatedRoute,
-     private router: Router
+    private router: Router
   ) {}
 
   ngOnInit() {
-    // Listen for language changes
-    this.languageService.language$.subscribe(lang => {
-      this.selectedLanguage = lang as 'en' | 'ar';
-      this.setCategories();
-      this.openedCategory = null; // Optionally close opened category on language change
+    this.route.queryParams.subscribe(params => {
+      const type = params['type'];
+      this.selectedType = (type === 'restaurant' || type === 'caffeh') ? type : 'restaurant';
+      this.loadCategoriesAndItems();
     });
 
-    // Listen for type changes (from menu navigation)
-    this.route.queryParams.subscribe(params => {
-      this.selectedType = params['type'] || 'restaurant';
-      this.loadItems();
+    this.languageService.language$.subscribe(lang => {
+      this.selectedLanguage = lang as 'en' | 'ar';
+      this.loadCategoriesAndItems();
+      this.openedCategory = null;
     });
   }
 
   ngAfterViewInit() {
-    this.onWindowScroll(); // Initialize scroll position
+    this.onWindowScroll();
   }
 
-  loadItems() {
+  loadCategoriesAndItems() {
     this.loading = true;
-    this.itemsService.getItems().subscribe((items: Item[]) => {
-      this.items = items.filter(item => item.TYPE === this.selectedType);
-      this.setCategories();
-      this.loading = false;
+    this.categoryService.getCategories(this.selectedType).subscribe(categories => {
+      this.categories = categories;
+      this.itemsService.getItems().subscribe((items: Item[]) => {
+        this.items = items.filter(item => item.TYPE === this.selectedType);
+        this.loading = false;
+      });
     });
   }
 
-  setCategories() {
-    const categoryMap: { [key: string]: { name: string; icon: string; items: Item[] } } = {};
-    this.items.forEach(item => {
-      const catName = this.selectedLanguage === 'ar' ? item.CATEGORY_NAME_AR : item.CATEGORY_NAME_EN;
-      if (catName && !categoryMap[catName]) {
-        categoryMap[catName] = {
-          name: catName,
-          icon: item.CATEGORY_ICON,
-          items: []
-        };
-      }
-      if (catName) {
-        categoryMap[catName].items.push(item);
-      }
-    });
-    this.categories = Object.values(categoryMap);
+  getCategoryName(category: Category): string {
+    return this.selectedLanguage === 'ar'
+      ? category.CATEGORY_NAME_AR || ''
+      : category.CATEGORY_NAME_EN || '';
   }
 
-  toggleCategory(categoryName: string) {
-    this.openedCategory = this.openedCategory === categoryName ? null : categoryName;
+  getItemsForCategory(category: Category): Item[] {
+    return this.items.filter(item => item.CATEGORY_ID === category.CATEGORY_ID);
+  }
+
+  toggleCategory(category: Category) {
+    const name = this.getCategoryName(category);
+    this.openedCategory = this.openedCategory === name ? null : name;
   }
 
   getItemName(item: Item) {
@@ -99,12 +93,10 @@ export class CategoryviewComponent implements OnInit, AfterViewInit {
     this.languageService.setLanguage(this.selectedLanguage);
   }
 
-  // ===== Carousel logic below =====
-
   scrollCarousel(direction: 'left' | 'right') {
     const carousel = this.carouselRef?.nativeElement;
     if (carousel) {
-      const scrollAmount = 120; // Adjust based on box width
+      const scrollAmount = 120;
       carousel.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -112,26 +104,23 @@ export class CategoryviewComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onCarouselCategoryClick(categoryName: string) {
-    this.openedCategory = categoryName;
+  onCarouselCategoryClick(category: Category) {
+    const name = this.getCategoryName(category);
+    this.openedCategory = name;
     setTimeout(() => {
-      const el = document.getElementById('cat-' + this.slugify(categoryName));
+      const el = document.getElementById('cat-' + this.slugify(name));
       if (el) {
-        // Get the fixed header height
         const header = document.querySelector('.top-fixed-buttons') as HTMLElement;
-        const headerOffset = header ? header.offsetHeight : 112; // fallback
-
-        // Get the element's position relative to the document
+        const headerOffset = header ? header.offsetHeight : 112;
         const rect = el.getBoundingClientRect();
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const offsetTop = rect.top + scrollTop - headerOffset;
-
         window.scrollTo({
           top: offsetTop,
           behavior: 'smooth'
         });
       }
-    }, 400); // Increase timeout if your card expands/collapses
+    }, 400);
   }
 
   slugify(str: string): string {
@@ -139,16 +128,14 @@ export class CategoryviewComponent implements OnInit, AfterViewInit {
   }
 
   goBackToMenu() {
-  // If using Angular router:
-  this.router.navigate(['']); // Adjust '/menu' to your actual menu route
-}
-
-@HostListener('window:scroll', [])
-onWindowScroll() {
-  if (this.menuBannerRef) {
-    console.log(this.afterMenuBanner)
-    const bannerBottom = this.menuBannerRef.nativeElement.getBoundingClientRect().bottom;
-    this.afterMenuBanner = bannerBottom <= 0;
+    this.router.navigate(['']);
   }
-}
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (this.menuBannerRef) {
+      const bannerBottom = this.menuBannerRef.nativeElement.getBoundingClientRect().bottom;
+      this.afterMenuBanner = bannerBottom <= 0;
+    }
+  }
 }

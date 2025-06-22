@@ -79,13 +79,13 @@
       <div class="nav-chips-container" #carousel>
         <div class="nav-chip" 
              *ngFor="let category of categories"
-             [class.active]="openedCategory === category.name"
-             (click)="onCarouselCategoryClick(category.name)">
-          <div class="chip-icon" *ngIf="category.icon && category.icon.trim() !== ''">
-            <img [src]="category.icon" alt="category icon" />
+             [class.active]="openedCategory === getCategoryName(category)"
+             (click)="onCarouselCategoryClick(category)">
+          <div class="chip-icon" *ngIf="category.CATEGORY_ICON && category.CATEGORY_ICON.trim() !== ''">
+            <img [src]="category.CATEGORY_ICON" alt="category icon" />
           </div>
-          <span class="chip-label">{{ category.name }}</span>
-          <div class="chip-count">{{ category.items.length }}</div>
+          <span class="chip-label">{{ getCategoryName(category) }}</span>
+          <div class="chip-count">{{ getItemsForCategory(category).length }}</div>
         </div>
       </div>
       
@@ -112,34 +112,34 @@
       <!-- Category Cards -->
       <div class="categories-grid" *ngIf="categories.length > 0">
         <div class="category-card" 
-             [id]="'cat-' + slugify(category.name)"
+             [id]="'cat-' + slugify(getCategoryName(category))"
              *ngFor="let category of categories; let i = index"
              [style.--card-index]="i">
           
           <!-- Category Header -->
-          <div class="category-header" (click)="toggleCategory(category.name)">
+          <div class="category-header" (click)="toggleCategory(category)">
             <div class="category-info">
-              <div class="category-icon" *ngIf="category.icon && category.icon.trim() !== ''">
-                <img [src]="category.icon" alt="category icon" />
+              <div class="category-icon" *ngIf="category.CATEGORY_ICON && category.CATEGORY_ICON.trim() !== ''">
+                <img [src]="category.CATEGORY_ICON" alt="category icon" />
               </div>
               <div class="category-details">
-                <h3 class="category-title">{{ category.name }}</h3>
-                <span class="category-count">{{ category.items.length }} {{ selectedLanguage === 'ar' ? 'عنصر' : 'items' }}</span>
+                <h3 class="category-title">{{ getCategoryName(category) }}</h3>
+                <span class="category-count">{{ getItemsForCategory(category).length }} {{ selectedLanguage === 'ar' ? 'عنصر' : 'items' }}</span>
               </div>
             </div>
             <div class="expand-button">
-              <i class="fas fa-chevron-down" [class.rotated]="openedCategory === category.name"></i>
+              <i class="fas fa-chevron-down" [class.rotated]="openedCategory === getCategoryName(category)"></i>
             </div>
           </div>
 
           <!-- Category Items -->
-          <div class="category-items" [class.expanded]="openedCategory === category.name">
+          <div class="category-items" [class.expanded]="openedCategory === getCategoryName(category)">
             <div class="items-loading" *ngIf="loading">
               <div class="loading-spinner"></div>
               <span>{{ selectedLanguage === 'ar' ? 'جاري تحميل العناصر...' : 'Loading items...' }}</span>
             </div>
 
-            <div class="items-empty" *ngIf="!loading && category.items.length === 0">
+            <div class="items-empty" *ngIf="!loading && getItemsForCategory(category).length === 0">
               <div class="empty-icon">
                 <i class="fas fa-plate-wheat"></i>
               </div>
@@ -147,9 +147,9 @@
             </div>
 
             <!-- Items Grid -->
-            <div class="items-grid" *ngIf="!loading && category.items.length > 0">
+            <div class="items-grid" *ngIf="!loading && getItemsForCategory(category).length > 0">
               <div class="item-card" 
-                   *ngFor="let item of category.items; let j = index"
+                   *ngFor="let item of getItemsForCategory(category); let j = index"
                    [style.--item-index]="j">
                 
                 <div class="item-image-container">
@@ -194,6 +194,13 @@
       <div class="loading-spinner-large"></div>
       <h3 class="loading-text">{{ selectedLanguage === 'ar' ? 'جاري تحميل القائمة...' : 'Loading menu...' }}</h3>
       <p class="loading-subtext">{{ selectedLanguage === 'ar' ? 'يرجى الانتظار بينما نحضر قائمتك' : 'Please wait while we prepare your menu' }}</p>
+    </div>
+  </div>
+
+  <div *ngFor="let category of categories">
+    <!-- category info -->
+    <div *ngFor="let item of getItemsForCategory(category)">
+      <!-- item info -->
     </div>
   </div>
 </div>

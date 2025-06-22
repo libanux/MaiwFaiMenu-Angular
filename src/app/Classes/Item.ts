@@ -16,5 +16,6 @@ export class Item {
   ITEM_SIZES?: { [size: string]: number }; // Optional: sizes and prices
   OWNER_ID!: number; // Owner/branch ID
   TYPE!: string; // "restaurant" or other type
+  CATEGORY_ID?: string | null;
 }
 
