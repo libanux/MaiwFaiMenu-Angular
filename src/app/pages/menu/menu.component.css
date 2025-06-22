@@ -746,6 +746,15 @@
   transform: translateY(-1px);
 }
 
+/* Remove background from all forms and inputs on this page */
+form,
+input,
+textarea,
+select {
+  background: transparent !important;
+  box-shadow: none;
+}
+
 /* Enhanced Responsive Design */
 @media (max-width: 768px) {
   .hero-content {
@@ -846,4 +855,10 @@
 .social-link:focus-visible {
   outline: 2px solid white;
   outline-offset: 2px;
+}
+
+.active-btn {
+  background: var(--primary-orange);
+  color: #fff;
+  border: none;
 }
