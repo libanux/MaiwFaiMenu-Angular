@@ -44,34 +44,14 @@
   <!-- Main Content -->
   <div class="main-content">
     <!-- Business Info Card -->
-    <div class="business-info-card">
+    <div >
       <div class="business-header">
         <div class="business-type-chip">
           {{ selectedLanguage === 'ar' ? (selectedType === 'restaurant' ? 'مطعم' : 'مقهى') : (selectedType | titlecase) }}
         </div>
       </div>
       
-      <div class="contact-info-grid">
-        <div class="contact-item">
-          <div class="contact-icon">
-            <i class="fas fa-map-marker-alt"></i>
-          </div>
-          <div class="contact-details">
-            <span class="contact-label">{{ selectedLanguage === 'ar' ? 'الموقع' : 'Location' }}</span>
-            <span class="contact-value">{{ selectedLanguage === 'ar' ? 'النبطية، قعقعية الجسر، نهر الليطاني، لبنان' : 'Nabatieh, Qaaqaiyat Al-Jisr, Litani River, Lebanon' }}</span>
-          </div>
-        </div>
-        
-        <div class="contact-item">
-          <div class="contact-icon">
-            <i class="fas fa-phone-alt"></i>
-          </div>
-          <div class="contact-details">
-            <span class="contact-label">{{ selectedLanguage === 'ar' ? 'الهاتف' : 'Phone' }}</span>
-            <span class="contact-value">+961 03 128 075  |  +961 07 541 754</span>
-          </div>
-        </div>
-      </div>
+     
     </div>
 
     <!-- Category Navigation Chips -->
@@ -195,6 +175,28 @@
       <h3 class="loading-text">{{ selectedLanguage === 'ar' ? 'جاري تحميل القائمة...' : 'Loading menu...' }}</h3>
       <p class="loading-subtext">{{ selectedLanguage === 'ar' ? 'يرجى الانتظار بينما نحضر قائمتك' : 'Please wait while we prepare your menu' }}</p>
     </div>
+
+     <div class="contact-info-grid">
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">{{ selectedLanguage === 'ar' ? 'الموقع' : 'Location' }}</span>
+            <span class="contact-value">{{ selectedLanguage === 'ar' ? 'النبطية، قعقعية الجسر، نهر الليطاني، لبنان' : 'Nabatieh, Qaaqaiyat Al-Jisr, Litani River, Lebanon' }}</span>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-phone-alt"></i>
+          </div>
+          <div class="contact-details">
+            <span class="contact-label">{{ selectedLanguage === 'ar' ? 'الهاتف' : 'Phone' }}</span>
+            <span class="contact-value">+961 03 128 075  |  +961 07 541 754</span>
+          </div>
+        </div>
+      </div>
   </div>
 </div>
 
