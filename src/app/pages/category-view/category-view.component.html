@@ -128,12 +128,12 @@
               </div>
             </div>
             <div class="expand-button">
-              <i class="fas fa-chevron-down" [class.rotated]="openedCategory === category.name"></i>
+              <i class="fas fa-chevron-down" [class.rotated]="openedCategories.includes(category.name)"></i>
             </div>
           </div>
 
           <!-- Category Items -->
-          <div class="category-items" [class.expanded]="openedCategory === category.name">
+          <div class="category-items" [class.expanded]="openedCategories.includes(category.name)">
             <div class="items-loading" *ngIf="loading">
               <div class="loading-spinner"></div>
               <span>{{ selectedLanguage === 'ar' ? 'جاري تحميل العناصر...' : 'Loading items...' }}</span>
