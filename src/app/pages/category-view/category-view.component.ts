@@ -19,6 +19,7 @@ export class CategoryviewComponent implements OnInit, AfterViewInit {
   selectedLanguage: 'en' | 'ar' = 'en';
   selectedType: string = 'restaurant';
   openedCategory: string | null = null;
+  openedCategories: string[] = [];
   loading = true;
   backArrowBlack = false;
   afterMenuBanner = false;
@@ -79,10 +80,17 @@ export class CategoryviewComponent implements OnInit, AfterViewInit {
       }
     });
     this.categories = Object.values(categoryMap);
+
+    // Open all categories by default
+    this.openedCategories = this.categories.map(cat => cat.name);
   }
 
   toggleCategory(categoryName: string) {
-    this.openedCategory = this.openedCategory === categoryName ? null : categoryName;
+    if (this.openedCategories.includes(categoryName)) {
+      this.openedCategories = this.openedCategories.filter(name => name !== categoryName);
+    } else {
+      this.openedCategories = [...this.openedCategories, categoryName];
+    }
   }
 
   getItemName(item: Item) {

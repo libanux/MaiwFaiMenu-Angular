@@ -284,6 +284,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
+  margin-top: 4rem;
 }
 
 .contact-item {
@@ -908,6 +909,19 @@
   }
 
   .category-items {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+@media (max-width: 596px) {
+  .main-content,
+  .categories-content,
+  .categories-grid,
+  .category-card,
+  .category-items,
+  .items-grid {
+    height: auto !important;
     max-height: none !important;
     overflow: visible !important;
   }
